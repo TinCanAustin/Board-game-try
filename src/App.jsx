@@ -23,17 +23,11 @@ function HexTile({ position = [0, 0, 0], scale = 0.0022}){
 function HexBoard(){
   const tiles = [];
 
-  const {row, col, spacing} = useControls({
-    row: {
-      value: 5,
-      min: 2,
-      max: 20,
-      step: 1
-    },
-    col: {
-      value: 5,
-      min: 2,
-      max: 20,
+  const {size , spacing} = useControls({
+    size: {
+      value: 2,
+      min: 3,
+      max: 10,
       step: 1
     },
     spacing: {
@@ -42,15 +36,17 @@ function HexBoard(){
       max: 5,
       step: 1
     }
-  });
+  }); 
 
-  const xSpacing = spacing * Math.sqrt(3);
-  const ySpacing = spacing * 1.5;
+  const xSpacing = spacing * Math.sqrt(3)
+  const zSpacing = spacing * 1.5;
 
-  for (let q=0; q < col; q++){
-    for(let r=0; r < row; r++){
+
+  for (let q = -size; q <= size; q++){
+    for(let r = Math.max(-size, -q - size); r <= Math.min(size, -q + size); r++){
       const x = xSpacing * (q + r / 2);
-      const z = ySpacing * r;
+      const z = zSpacing * r;
+
       tiles.push(<HexTile key={`${q},${r}`} position={[x, 0, z]} />);
     }
   }
