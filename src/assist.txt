@@ -1,0 +1,55 @@
+import { useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber'
+import { 
+  OrbitControls,
+  GizmoHelper,
+  GizmoViewport
+} from '@react-three/drei';
+
+import { useControls } from 'leva';
+
+function Animation(){
+  const boxRef = useRef();
+
+  const { speed } = useControls({
+    speed:{
+      value: 0.005,
+      min: 0.00,
+      max: 0.02,
+      step: 0.001
+    }
+  });
+
+  useFrame(()=>{
+    boxRef.current.rotation.x += speed;
+  });
+
+  return (
+    <mesh ref={boxRef}>
+      <boxGeometry args={[1, 2, 3]}/>
+      <meshStandardMaterial color={0x00bfff}/>
+    </mesh>
+  );
+}
+
+function App() {
+
+  return (
+    <div id='canvas-container'>
+      <Canvas>
+
+        <GizmoHelper alignment="bottom-right">
+          <GizmoViewport/>
+        </GizmoHelper>
+
+        <axesHelper args={[10]}/>
+        <gridHelper args={[20, 20]}/>
+        <OrbitControls/>
+        <Animation/>
+        <ambientLight color={0xfcfcfc} intensity={1} />
+      </Canvas>
+    </div>
+  )
+}
+
+export default App
